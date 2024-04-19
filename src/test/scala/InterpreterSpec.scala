@@ -15,4 +15,9 @@ class InterpreterSpec extends FunSuite {
     val res = Interpreter.fromString(">").step(VM.init)
     assertEquals(res, VM.init.copy(ip = 1, dp = 1))
   }
+
+  test("'<' Decrement the data pointer by one") {
+    val res = Interpreter.fromString("<").step(VM.init.copy(dp = 10))
+    assertEquals(res, VM.init.copy(ip = 1, dp = 9))
+  }
 }

@@ -13,6 +13,7 @@ case class Interpreter(program: Vector[Char]):
   def step(vm: VM): VM =
     program.lift(vm.ip).collect {
       case '>' => vm.copy(ip = vm.ip + 1, dp = vm.dp + 1)
+      case '<' => vm.copy(ip = vm.ip + 1, dp = vm.dp - 1)
     }.getOrElse(vm)
 
 object Interpreter:
