@@ -74,9 +74,30 @@ class InterpreterSpec extends FunSuite {
     assertEquals(res, (vm.copy(ip = 1), Some(byte)))
   }
 
-  test("',' Accept one byte of input, storing its value in the byte at the data pointer") {
+  test(
+    "',' Accept one byte of input, storing its value in the byte at the data pointer"
+  ) {
     val in: InputStream = ByteArrayInputStream("Asdf".getBytes)
     val res = Interpreter.fromString(",").step(VM.init, in)
-    assertEquals(res, (VM(ip = 1, data = Data.fromBytes(Seq('A'.toByte))), None))
+    assertEquals(
+      res,
+      (VM(ip = 1, data = Data.fromBytes(Seq('A'.toByte))), None)
+    )
+  }
+
+  test("'[' If data is not zero, then move the instruction pointer forward") {
+    val vm = VM.init.setData(1)
+    val res = Interpreter.fromString("[ab]c").step(vm)
+    assertEquals(res, (VM(ip = 1, data = Data.fromBytes(Seq(1))), None))
+  }
+
+  test("'[' If data is zero, move forward to the next command after ']'") {
+    val res = Interpreter.fromString("[ab]c").step(VM.init)
+    assertEquals(res, (VM(ip = 4), None))
+  }
+
+  test("'[' If data is zero, move forward to the next command after matching ']'") {
+    val res = Interpreter.fromString("[a[b[]]c]d").step(VM.init)
+    assertEquals(res, (VM(ip = 9), None))
   }
 }
