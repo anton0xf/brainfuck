@@ -13,7 +13,9 @@ case class Interpreter(program: Vector[Char]):
   def step(vm: VM): VM =
     program.lift(vm.ip).collect {
       case '>' => vm.copy(ip = vm.ip + 1, dp = vm.dp + 1)
-      case '<' => vm.copy(ip = vm.ip + 1, dp = vm.dp - 1)
+      case '<' => if vm.dp == 0
+        then throw RuntimeException("< on zero data pointer")
+        else vm.copy(ip = vm.ip + 1, dp = vm.dp - 1)
     }.getOrElse(vm)
 
 object Interpreter:

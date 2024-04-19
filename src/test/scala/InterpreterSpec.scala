@@ -20,4 +20,11 @@ class InterpreterSpec extends FunSuite {
     val res = Interpreter.fromString("<").step(VM.init.copy(dp = 10))
     assertEquals(res, VM.init.copy(ip = 1, dp = 9))
   }
+
+  test("'<' on zero data pointer is error") {
+    val ex = intercept[RuntimeException]{
+      Interpreter.fromString("<").step(VM.init)
+    }
+    assertEquals(ex.getMessage, "< on zero data pointer")
+  }
 }
