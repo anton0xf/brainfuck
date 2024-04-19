@@ -13,6 +13,6 @@ class InterpreterSpec extends FunSuite {
 
   test("'>' Increment the data pointer by one") {
     val res = Interpreter.fromString(">").step(VM.init)
-    assertEquals(res, VM.init.copy(ip = 1, data = Data.fromBytes(Seq(1))))
+    assertEquals(res, VM.init.copy(ip = 1, dp = 1))
   }
 }
