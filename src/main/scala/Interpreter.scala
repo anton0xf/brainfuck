@@ -10,8 +10,8 @@ case class VM(
   def nextIP: VM = copy(ip = ip + 1)
   def incDP: VM = copy(dp = dp + 1)
   def decDP: VM = if dp == 0
-    then throw RuntimeException("< on zero data pointer")
-    else copy(dp = dp - 1)
+  then throw RuntimeException("< on zero data pointer")
+  else copy(dp = dp - 1)
   def incData: VM = copy(data = data.inc(dp))
   def decData: VM = copy(data = data.dec(dp))
   def setData(byte: Byte): VM = copy(data = data.set(dp, byte))
@@ -31,6 +31,7 @@ case class Interpreter(program: Vector[Char]):
         case '-' => (vm.nextIP.decData, None)
         case '.' => (vm.nextIP, Some(vm.data.get(vm.dp)))
         case ',' => (vm.nextIP.setData(in.read().toByte), None)
+        case _   => (vm.nextIP, None)
       }
       .getOrElse((vm, None))
 

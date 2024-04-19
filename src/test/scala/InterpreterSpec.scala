@@ -10,7 +10,7 @@ class InterpreterSpec extends FunSuite {
 
   test("other characters are ignored") {
     val res = Interpreter.fromString("asdf").step(VM.init)
-    assertEquals(res, (VM.init, None))
+    assertEquals(res, (VM(ip = 1), None))
   }
 
   test("'>' Increment the data pointer by one") {
