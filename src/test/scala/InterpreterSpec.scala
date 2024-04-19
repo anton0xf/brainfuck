@@ -1,6 +1,6 @@
 import munit.FunSuite
 
-import java.io.ByteArrayOutputStream
+import java.io.{ByteArrayInputStream, InputStream}
 
 class InterpreterSpec extends FunSuite {
   test("empty program do nothing") {
@@ -72,5 +72,11 @@ class InterpreterSpec extends FunSuite {
     val vm = VM(data = Data.fromBytes(Seq(byte)))
     val res = Interpreter.fromString(".").step(vm)
     assertEquals(res, (vm.copy(ip = 1), Some(byte)))
+  }
+
+  test("',' Accept one byte of input, storing its value in the byte at the data pointer") {
+    val in: InputStream = ByteArrayInputStream("Asdf".getBytes)
+    val res = Interpreter.fromString(",").step(VM.init, in)
+    assertEquals(res, (VM(ip = 1, data = Data.fromBytes(Seq('A'.toByte))), None))
   }
 }
