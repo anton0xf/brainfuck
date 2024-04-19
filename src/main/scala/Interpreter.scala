@@ -16,6 +16,7 @@ case class Interpreter(program: Vector[Char]):
       val cmd = program(vm.ip)
       cmd match {
         case '>' => vm.copy(ip = vm.ip + 1, data = vm.data.inc(vm.dp))
+        case _ => vm
       }
     } else vm
 
