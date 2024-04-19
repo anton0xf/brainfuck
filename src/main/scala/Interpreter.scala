@@ -16,6 +16,7 @@ case class Interpreter(program: Vector[Char]):
       case '<' => if vm.dp == 0
         then throw RuntimeException("< on zero data pointer")
         else vm.copy(ip = vm.ip + 1, dp = vm.dp - 1)
+      case '+' => vm.copy(ip = vm.ip + 1, data = vm.data.inc(vm.dp))
     }.getOrElse(vm)
 
 object Interpreter:
