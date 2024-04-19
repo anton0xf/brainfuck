@@ -11,14 +11,9 @@ object VM:
 
 case class Interpreter(program: Vector[Char]):
   def step(vm: VM): VM =
-    if program.indices contains vm.ip
-    then {
-      val cmd = program(vm.ip)
-      cmd match {
-        case '>' => vm.copy(ip = vm.ip + 1, data = vm.data.inc(vm.dp))
-        case _ => vm
-      }
-    } else vm
+    program.lift(vm.ip).collect {
+      case '>' => vm.copy(ip = vm.ip + 1, data = vm.data.inc(vm.dp))
+    }.getOrElse(vm)
 
 object Interpreter:
   def fromString(s: String): Interpreter = Interpreter(Vector.from(s))
