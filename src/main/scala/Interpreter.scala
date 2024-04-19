@@ -25,13 +25,9 @@ case class Interpreter(program: Vector[Char]):
         case '-' => (vm.copy(ip = vm.ip + 1, data = vm.data.dec(vm.dp)), None)
         case '.' => (vm.copy(ip = vm.ip + 1), Some(vm.data.get(vm.dp)))
         case ',' =>
-          (
-            vm.copy(
-              ip = vm.ip + 1,
-              data = vm.data.set(vm.dp, in.read().toByte)
-            ),
-            None
-          )
+          val newData = vm.data.set(vm.dp, in.read().toByte)
+          val newVM = vm.copy(ip = vm.ip + 1, data = newData)
+          (newVM, None)
       }
       .getOrElse((vm, None))
 
