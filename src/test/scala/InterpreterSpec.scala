@@ -46,4 +46,23 @@ class InterpreterSpec extends FunSuite {
     val res = Interpreter.fromString("+").step(vm)
     assertEquals(res, VM.init.copy(ip = 1, data = Data.fromBytes(Seq(Byte.MinValue))))
   }
+
+  test("'-' Decrement the byte at the data pointer (0) by one") {
+    val res = Interpreter.fromString("-").step(VM.init)
+    assertEquals(res, VM.init.copy(ip = 1, data = Data.fromBytes(Seq(-1))))
+  }
+
+  test("'-' Decrement the byte at the data pointer (2) by one") {
+    val res = Interpreter.fromString("-").step(VM(dp = 2))
+    assertEquals(
+      res,
+      VM.init.copy(ip = 1, dp = 2, data = Data.fromBytes(Seq(0, 0, -1)))
+    )
+  }
+
+  test("'-' Decrement the byte at the data pointer by one with overflow") {
+    val vm = VM(data = Data.fromBytes(Seq(Byte.MinValue)))
+    val res = Interpreter.fromString("-").step(vm)
+    assertEquals(res, VM.init.copy(ip = 1, data = Data.fromBytes(Seq(Byte.MaxValue))))
+  }
 }

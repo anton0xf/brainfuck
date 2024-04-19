@@ -2,6 +2,7 @@ case class Data (data: Map[Int, Byte] = Map()):
   def get(dp: Int): Byte = data.getOrElse(dp, 0)
   def set(dp: Int, byte: Byte): Data = Data(data.updated(dp, byte))
   def inc(dp: Int) = set(dp, (get(dp) + 1).toByte)
+  def dec(dp: Int) = set(dp, (get(dp) - 1).toByte)
 
   override def equals(obj: Any): Boolean = obj match {
     case o: Data => (data.keySet ++ o.data.keySet).forall(k => get(k) == o.get(k))
