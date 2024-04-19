@@ -38,6 +38,11 @@ case class Interpreter(program: Vector[Char]):
             if vm.getData != 0 then vm.nextIP
             else vm.copy(ip = skipParens(program, vm.ip))
           (newVM, None)
+        case ']' =>
+          val newVM =
+            if vm.getData == 0 then vm.nextIP
+            else vm.copy(ip = skipParensBack(program, vm.ip))
+          (newVM, None)
         case _ => (vm.nextIP, None)
       }
       .getOrElse((vm, None))
@@ -58,3 +63,18 @@ def skipParens(p: Vector[Char], ip: Int): Int =
       }
     }
   go(ip + 1, 1)
+
+def skipParensBack(p: Vector[Char], ip: Int): Int =
+  assert(p(ip) == ']', "sequence of parens should end by ']': " + p)
+  @tailrec
+  def go(i: Int, close: Int): Int =
+    if close == 0 then i + 2
+    else if i < 0 then throw RuntimeException(s"couldn't find matching open paren for ip: $ip in '$p''")
+    else {
+      p(i) match {
+        case '[' => go(i - 1, close - 1)
+        case ']' => go(i - 1, close + 1)
+        case _   => go(i - 1, close)
+      }
+    }
+  go(ip - 1, 1)

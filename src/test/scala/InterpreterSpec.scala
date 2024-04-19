@@ -100,4 +100,17 @@ class InterpreterSpec extends FunSuite {
     val res = Interpreter.fromString("[a[b[]]c]d").step(VM.init)
     assertEquals(res, (VM(ip = 9), None))
   }
+
+  test("']' If data is zero, then move forward") {
+    val vm = VM(ip = 3)
+    val res = Interpreter.fromString("[ab]c").step(vm)
+    assertEquals(res, (VM(ip = 4), None))
+  }
+
+  test("']' If data is nonzero, then jump back to the command after the matching '['") {
+    val data = Data.fromBytes(Seq(1))
+    val vm = VM(ip = 8, data = data)
+    val res = Interpreter.fromString("[a[b[]]c]d").step(vm)
+    assertEquals(res, (VM(ip = 1, data = data), None))
+  }
 }
