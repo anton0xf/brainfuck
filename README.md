@@ -2,13 +2,20 @@
 See [wiki](https://en.wikipedia.org/wiki/Brainfuck)
 
 ## sbt project compiled with Scala 3
-
 ### Usage
-
 This is a normal sbt project. You can compile code with `sbt compile`, run it with `sbt run`, and `sbt console` will start a Scala 3 REPL.
 
 For more information on the sbt-dotty plugin, see the
 [scala3-example-project](https://github.com/scala/scala3-example-project/blob/main/README.md).
+
+Usage example:
+```shell
+$ sbt "run -c '++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.'"
+...
+Brainfuck interpreter
+Hello World!
+[success] Total time: 1 s, completed Apr 20, 2024, 10:10:47 PM
+```
 
 ## Language
 The language consists of eight commands.

@@ -47,6 +47,15 @@ case class Interpreter(program: Vector[Char]):
       }
       .getOrElse((vm, None))
 
+  @tailrec
+  final def run(vm: VM = VM.init, in: InputStream = System.in): Unit =
+    if program.indices contains vm.ip
+    then {
+      val (nextVM, byte) = step(vm, in)
+      byte.foreach(b => print(b.toChar))
+      run(nextVM)
+    }
+
 object Interpreter:
   def fromString(s: String): Interpreter = Interpreter(Vector.from(s))
 
@@ -69,7 +78,10 @@ def skipParensBack(p: Vector[Char], ip: Int): Int =
   @tailrec
   def go(i: Int, close: Int): Int =
     if close == 0 then i + 2
-    else if i < 0 then throw RuntimeException(s"couldn't find matching open paren for ip: $ip in '$p''")
+    else if i < 0 then
+      throw RuntimeException(
+        s"couldn't find matching open paren for ip: $ip in '$p''"
+      )
     else {
       p(i) match {
         case '[' => go(i - 1, close - 1)
